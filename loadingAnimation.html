@@ -1,1 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Loading Animation Simulator</title>
+  </head>
+  <body
+    style="
+      font-family: monospace;
+      text-align: center;
+      padding-top: 100px;
+      background-color: #f4f4f4;
+    "
+  >
+    <div id="loader" style="font-size: 2rem; margin-bottom: 20px">
+      Loading...
+    </div>
+    <div id="status">Please wait</div>
 
+    <script>
+      //this function declaration sets up the animation to run and sets the condition when the animation should stop.
+      function runLoadingAnimation() {
+        //the html elements are accessed below by their IDs
+        const loader = document.getElementById('loader');
+        const status = document.getElementById('status');
+        // frames var is an array storing the animations the setInterval func will cycle through once set
+        const frames = ['⏳', '⌛', '.', '..', '...'];
+        let index = 0; // the index of frames where the animation should start
+        let cycleCount = 0; // running count of the cycles
+        const maxCycles = 5; // the condition at which we want to stop our interval
+
+        // setInterval func accepts a func and a delay count
+        // interval var stores the timer id returned by the setInterval func
+        const interval = setInterval(() => {
+          // access the textContent of the html element id 'loader'
+          loader.textContent = frames[index % frames.length]; // modulo here checks that index is a valid for the frames array, will start over when false
+          index++; // how much the index increments by
+          if (index % frames.length === 0) {
+            // condition to check if index has been reset to 0, or started over
+            cycleCount++; // increment cycleCount when condition true
+          }
+          if (cycleCount > maxCycles / 2) {
+            status.textContent = 'Half way there!';
+          }
+          if (cycleCount >= maxCycles) {
+            // Consider adding some a noise element to signal the loading has completed.
+            // conditional check to see if cycle has looped enough times
+            clearInterval(interval); // clearInterval passed timer ID stored at interval func so that it can stop the setInterval execution
+            loader.textContent = '✅'; //element with ID loader's text content finale update
+            status.textContent = 'Done!'; // element with status ID's text content final update
+          }
+        }, 500); // delay count in milliseconds between each call to the function arg passed to setInterval
+      }
+
+      runLoadingAnimation(); //func call to set the whole plan in motion
+    </script>
+  </body>
+</html>
